@@ -117,3 +117,61 @@ AP = average_precision(relevance)
 print("Average Precision (AP):", round(AP, 3))
 ```
 ```
+---
+
+# Practical No. 4
+
+## Aim
+Implement PageRank algorithm to rank web pages based on importance.
+
+---
+
+## Theory
+- PageRank is an algorithm used to measure the importance of web pages.
+- It works based on the number and quality of links pointing to a page.
+- A page is important if it is linked by other important pages.
+- Damping factor (usually 0.85) is used to simulate random browsing.
+
+---
+
+## Code
+```python
+def pagerank(graph, damping=0.85, iterations=10):
+    pages = list(graph.keys())
+    N = len(pages)
+
+    # Initialize PageRank
+    PR = {page: 1 / N for page in pages}
+
+    for _ in range(iterations):
+        new_PR = {}
+
+        for page in pages:
+            incoming_sum = 0
+
+            for node in pages:
+                if page in graph[node]:
+                    incoming_sum += PR[node] / len(graph[node])
+
+            new_PR[page] = (1 - damping) / N + damping * incoming_sum
+
+        PR = new_PR
+
+    return PR
+
+
+# Example graph
+graph = {
+    'A': ['B', 'C'],
+    'B': ['C'],
+    'C': ['A'],
+    'D': ['C']
+}
+
+# Calculate PageRank
+ranks = pagerank(graph)
+
+# Print results
+for page, rank in ranks.items():
+    print(f"{page}: {round(rank, 3)}")
+```
