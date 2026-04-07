@@ -113,6 +113,55 @@ print("Average Precision (AP):", round(AP, 3))
 
 
 ```
+'''python PAGE rank algorithm
+"""
+PageRank Algorithm Implementation in Python
+
+This script calculates PageRank values for a given web graph
+using the iterative method.
+"""
+
+def pagerank(graph, damping=0.85, iterations=10):
+    pages = list(graph.keys())
+    N = len(pages)
+
+    # Initialize PageRank
+    PR = {page: 1 / N for page in pages}
+
+    # Iterative computation
+    for _ in range(iterations):
+        new_PR = {}
+
+        for page in pages:
+            incoming_sum = 0
+
+            for other_page in pages:
+                if page in graph[other_page]:
+                    outgoing_links = len(graph[other_page])
+                    if outgoing_links > 0:
+                        incoming_sum += PR[other_page] / outgoing_links
+
+            new_PR[page] = (1 - damping) / N + damping * incoming_sum
+
+        PR = new_PR
+
+    return PR
+
+
+if __name__ == "__main__":
+    # Example Web Graph
+    graph = {
+        "A": ["B", "C"],
+        "B": ["C"],
+        "C": ["A"],
+        "D": ["C"]
+    }
+
+    ranks = pagerank(graph)
+
+    print("PageRank Results:\n")
+    for page, rank in sorted(ranks.items()):
+        print(f"{page}: {rank:.4f}")
 
 # Practical No. 4
 
