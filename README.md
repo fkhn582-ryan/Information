@@ -163,6 +163,80 @@ if __name__ == "__main__":
     for page, rank in sorted(ranks.items()):
         print(f"{page}: {rank:.4f}")
 
+
+'''python WEb graph show page rank
+
+"""
+PageRank Visualization using NetworkX and Matplotlib
+
+This script:
+- Creates a directed web graph
+- Computes PageRank scores
+- Visualizes the graph with node sizes based on importance
+"""
+
+import networkx as nx
+import matplotlib.pyplot as plt
+
+
+def create_graph(graph_data):
+    """Create a directed graph from dictionary input"""
+    G = nx.DiGraph()
+    for page, links in graph_data.items():
+        for link in links:
+            G.add_edge(page, link)
+    return G
+
+
+def compute_pagerank(G):
+    """Compute PageRank scores"""
+    return nx.pagerank(G)
+
+
+def draw_graph(G, pagerank_scores):
+    """Visualize the graph with PageRank-based node sizes"""
+    plt.figure(figsize=(8, 6))
+
+    pos = nx.spring_layout(G)
+
+    # Node sizes based on PageRank
+    sizes = [pagerank_scores[node] * 3000 for node in G.nodes()]
+
+    nx.draw(
+        G,
+        pos,
+        with_labels=True,
+        node_size=sizes,
+        node_color="lightblue",
+        edgecolors="black",
+        linewidths=2,
+        font_size=12
+    )
+
+    nx.draw_networkx_edges(G, pos, arrows=True)
+
+    plt.title("PageRank Visualization")
+    plt.show()
+
+
+if __name__ == "__main__":
+    # Example Web Graph
+    graph = {
+        "A": ["B", "C"],
+        "B": ["C"],
+        "C": ["A"],
+        "D": ["C"]
+    }
+
+    G = create_graph(graph)
+    pagerank_scores = compute_pagerank(G)
+
+    print("PageRank Scores:")
+    for node, score in pagerank_scores.items():
+        print(f"{node}: {score:.4f}")
+
+    draw_graph(G, pagerank_scores)
+
 # Practical No. 4
 
 ## Aim
