@@ -318,7 +318,60 @@ urls = [
 
 # Crawl pages
 pages = crawl_urls(urls)
-''' 
+'''
+
+'''
+INVERTED INDEX web crawled
+
+import requests
+import re
+
+def crawl_urls(urls):
+    pages = {}
+    for url in urls:
+        try:
+            response = requests.get(url)
+            pages[url] = response.text
+        except:
+            pages[url] = ""
+    return pages
+
+
+def build_inverted_index(pages):
+    index = {}
+    for url, content in pages.items():
+        words = re.findall(r'\w+', content.lower())
+
+        for word in words:
+            if word not in index:
+                index[word] = set()
+            index[word].add(url)   # ✅ always add
+
+    return index   # ✅ outside loop
+
+
+# URLs
+urls = [
+    "https://example.com",
+    "https://www.python.org"
+]
+
+# Crawl
+pages = crawl_urls(urls)
+
+# Build index
+inverted_index = build_inverted_index(pages)
+
+print("Fatima Khan, 25")
+print("\nSample index entries:\n")
+
+# Show first 10 entries
+count = 0
+for term, url_list in inverted_index.items():
+    print(term, "->", list(url_list))
+    count += 1
+    if count == 10:
+        break
 
 
 
