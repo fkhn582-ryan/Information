@@ -59,21 +59,27 @@ Calculate precision, recall and F-measure for a given set of retrieval results.
 
 ## Code
 ```python
-from sklearn.metrics import precision_score, recall_score, f1_score
+# 1 = Relevant, 0 = Not Relevant
+actual_results = [1, 0, 1, 1, 0, 1, 0, 0, 1, 1]
+retrieved_results = [1, 0, 1, 0, 0, 1, 1, 0, 0, 1]
 
-# Actual and retrieved results
-actual_results = [1,0,1,1,0,1,0,0,1,1]
-retrieved_results = [1,0,1,0,0,1,1,0,0,1]
+TP = FP = FN = 0
 
-# Calculate metrics
-precision = precision_score(actual_results, retrieved_results)
-recall = recall_score(actual_results, retrieved_results)
-f1 = f1_score(actual_results, retrieved_results)
+for actual, retrieved in zip(actual_results, retrieved_results):
+    if actual == 1 and retrieved == 1:
+        TP += 1
+    elif actual == 0 and retrieved == 1:
+        FP += 1
+    elif actual == 1 and retrieved == 0:
+        FN += 1
 
-# Print results
+precision = TP / (TP + FP) if (TP + FP) != 0 else 0
+recall = TP / (TP + FN) if (TP + FN) != 0 else 0
+f1_score = (2 * precision * recall / (precision + recall)) if (precision + recall) != 0 else 0
+
 print("Precision:", round(precision, 2))
 print("Recall:", round(recall, 2))
-print("F1-Score:", round(f1, 2))
+print("F1-Score:", round(f1_score, 2))
 ```
 
 ---
