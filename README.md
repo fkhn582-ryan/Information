@@ -75,4 +75,45 @@ print("Precision:", round(precision, 2))
 print("Recall:", round(recall, 2))
 print("F1-Score:", round(f1, 2))
 ```
+
+---
+
+# Practical No. 3
+
+## Aim
+Use an evaluation toolkit to measure average precision and other evaluation metrics.
+
+---
+
+## Theory
+- It measures how well a system ranks relevant documents for a single query.
+- It averages the precision values obtained each time a relevant document is retrieved.
+
+---
+
+## Formula
+Average Precision (AP):
+
+AP = Σ (Precision@k × rel(k)) / Number of relevant documents
+
+---
+
+## Code
+```python
+import numpy as np
+
+# Relevance list (1 = relevant, 0 = not relevant)
+relevance = [1, 0, 1, 1, 0]
+
+def average_precision(x):
+    x = np.asarray(x)
+    precisions = [np.mean(x[:k+1]) for k in range(len(x)) if x[k] == 1]
+    return np.mean(precisions) if precisions else 0.0
+
+# Calculate AP
+AP = average_precision(relevance)
+
+# Output
+print("Average Precision (AP):", round(AP, 3))
+```
 ```
