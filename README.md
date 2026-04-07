@@ -192,50 +192,10 @@ def crawl_urls(urls):
             print(f"Failed to fetch: {url}")
 
     return pages
-
-# Example URL list
+    
 urls = [
     "https://example.com",
     "https://www.python.org"
 ]
 
-# Crawl pages
-pages = crawl_urls(urls)
-'''
-'''python 
 
-inverted index crawled web
-import requests
-import re
-def crawl_urls(urls):
-    pages={}
-    for url in urls:
-        try:
-            response=requests.get(url)
-            pages[url]=response.text
-        except:
-            pages[url]=""
-    return pages
-def build_inverted_index(pages):
-    index={}
-    for url,content in pages.items():
-        words=re.findall(r'\w+',content.lower())
-        for word in words:
-            if word not in index:
-                index[word]=set()
-                index[word].add(url)
-        return index
-urls=[
-        "https://example.com",
-        "https://www.python.org"
-]
-pages=crawl_urls(urls)
-inverted_index=build_inverted_index(pages)
-print("Fatima khan,25")
-print("sample index entries:")
-count=0
-for term,url_list in inverted_index.items():
-        print(term,"->",list(url_list))
-        count+=1
-        if count == 10:
-            break
