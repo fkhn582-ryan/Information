@@ -310,10 +310,16 @@ def crawl_urls(urls):
             print(f"Failed to fetch: {url}")
 
     return pages
-    
+
 urls = [
     "https://example.com",
     "https://www.python.org"
 ]
+
+# Crawl pages
+pages = crawl_urls(urls)
+''' 
+
+
 
 
