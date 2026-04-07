@@ -42,6 +42,74 @@ suggestions = correct_spelling(user_word, dictionary)
 
 print("\nDid you mean?:", ", ".join(suggestions))
 
+'''python
+ BOLEAN rETRIEVAL MODEL
+
+import re
+from collections import defaultdict
+class BooleanRetrieval:
+    def __init__(self,documents):
+        self.documents = documents
+        self.index = self.build_index(documents)
+
+    def build_index(self,documents):
+        index = defaultdict(set)
+        for i, doc in enumerate(documents):
+            for word in set(re.findall(r'\w+',doc.lower())):
+                index[word].add(i)
+
+        return index
+
+    def process_query(self,query):
+        tokens = query.lower().split()
+        result_set = set()
+        operator = None
+
+        i=0
+        while i<len(tokens):
+            token = tokens[i]
+            if token in ('and', 'or', 'not'):
+                operator = token
+                i+=1
+                continue
+            term_docs = self.index.get(token,set())
+
+            if operator == 'not':
+                if not result_set:
+                    result_set = set(range(len(self.documents)))
+                result_set = result_set.difference(term_docs)
+
+            elif operator == 'and' or operator is None:
+                if not result_set:
+                    result_set = term_docs.copy()
+
+                else:
+                    result_set = result_set.intersection(term_docs)
+
+            elif operator == 'or':
+                result_set = result_set.union(term_docs)
+
+            operator = None
+            i +=1
+
+        return sorted(result_set)
+
+if __name__ == "__main__":
+    documents = [
+        "A brown dog chased the fox",
+        "The dog is lazy",
+        "Fox and dog are friends",
+        "Lazy dogs are not quick"
+        ]
+
+    bool_model = BooleanRetrieval(documents)
+    query = "brown AND dog AND NOT lazy"
+    results = bool_model.process_query(query)
+
+    print("Boolean Retrieval Results : ")
+    for idx in results:
+        print(f"Doc[{idx}] : {documents[idx]}")
+
 # Practical No. 2
 
 ## Aim
